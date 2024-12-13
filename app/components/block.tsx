@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardFooter, CardHeader } from '@nextui-org/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Link } from '@nextui-org/react'
 import React from 'react'
 import { FluentEmojiHighContrastCrossMark } from './icon'
 
@@ -15,8 +15,8 @@ const Block = (props: Props) => {
           <h1 className='text-4xl font-bold text-center'>Authentication Error!</h1>
           <p className='text-xl w-2/3 text-center'>Your session have been blocked, Please use RMUTI education email to authenticate our service.</p>
         </CardBody>
-        <CardFooter className='flex justify-center'>
-          <Button color='danger' size='lg'>Go back</Button>
+        <CardFooter className='flex justify-center p-6'>
+          <Button as={Link} href='/' color='danger' size='lg'>Go back</Button>
         </CardFooter>
       </Card>
     </div>

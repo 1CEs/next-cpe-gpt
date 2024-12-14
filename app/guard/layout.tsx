@@ -1,4 +1,4 @@
-export default function RootLayout({
+export default function GuardLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;

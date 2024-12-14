@@ -28,7 +28,7 @@ export default function Home() {
           handleSignIn()
         }}
       >
-        <Logo />
+        <Logo width={150} height={150} textSize="6"/>
         {
           error && <Alert color="danger" tile={"Error"} description={error} />
         }

@@ -1,14 +1,17 @@
-import mongoose from "mongoose";
-import { Pending } from "./pending";
+import mongoose, { Document } from "mongoose";
 
-interface User extends Pending{
+export interface User {
+    email: string
+    name: string
+    image: string
     token_usage: number
+    status: "pending" | "accepted"
     role: "user" | "owner"
 }
 
 const { Schema, model } = mongoose
 
-export const UserSchema = new Schema<User>({
+export const UserSchema = new Schema<User & Document>({
     email: {
         type: Schema.Types.String,
         required: true
@@ -25,6 +28,11 @@ export const UserSchema = new Schema<User>({
         type: Schema.Types.Number,
         required: true
     },
+    status: {
+        type: Schema.Types.String,
+        enum: ["pending", "accepted"],
+        required: true
+    },
     role: {
         type: Schema.Types.String,
         enum: ["user", "owner"],
@@ -32,4 +40,4 @@ export const UserSchema = new Schema<User>({
     }
 }, { timestamps: true, _id: true })
 
-export const UserModel = model("users", UserSchema)
+export const UserModel = mongoose.models.User || mongoose.model('User', UserSchema);

@@ -5,10 +5,14 @@ import React, { JSX, useEffect, useState } from 'react'
 import Block from '../components/block'
 import InQueue from '../components/in-queue'
 import Logo from '../components/logo'
+import { useRouter } from 'next/navigation'
+import useUserStore from '@/store/user.store'
 
 const GuardPage: React.FC = () => {
     const { data: session, status } = useSession()
     const [content, setContent] = useState<JSX.Element | null>(null)
+    const router = useRouter()
+    const { setUser } = useUserStore()
 
     useEffect(() => {
         const handleAuthentication = async () => {
@@ -16,7 +20,7 @@ const GuardPage: React.FC = () => {
                 const isRMUTIEmail = session?.user?.email?.endsWith('@rmuti.ac.th')
                 if (isRMUTIEmail) {
                     try {
-                        const res = await fetch('/api/pending', {
+                        const res = await fetch('/api/user', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -30,12 +34,17 @@ const GuardPage: React.FC = () => {
 
                         if (!res.ok) {
                             console.error(
-                                'Error while sending data to /api/pending:',
+                                'Error while sending data to /api/user:',
                                 await res.text()
                             )
                         }
-
-                        setContent(<InQueue />)
+                        const data = await res.json()
+                        if (data.message == "success") {
+                            setUser(data.data)
+                            router.push('/overview')
+                        } else {
+                            setContent(<InQueue user={session.user} />)
+                        }
                     } catch (error) {
                         console.error('Error:', error)
                     }
@@ -47,7 +56,7 @@ const GuardPage: React.FC = () => {
             } else {
                 setContent(
                     <div className="w-full h-full flex justify-center items-center">
-                        <Logo />
+                        <Logo width={150} height={150} textSize="6"/>
                     </div>
                 )
             }

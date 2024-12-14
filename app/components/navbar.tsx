@@ -1,9 +1,9 @@
-import { Navbar as Nav, NavbarBrand, NavbarContent, NavbarItem, Link, Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Badge, Chip } from "@nextui-org/react";
+import { Navbar as Nav, NavbarBrand, NavbarContent, NavbarItem, Link, Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Badge, Chip, Button, Popover, PopoverContent, PopoverTrigger, Divider } from "@nextui-org/react";
 import React from "react";
 import Logo from "./logo";
 import useUserStore from "@/store/user.store";
 import { signOut } from "next-auth/react";
-import { LetsIconsSignOutSqureFill } from "./icon";
+import { IcBaselineInfo, LetsIconsSignOutSqureFill } from "./icon";
 
 const Navbar: React.FC = () => {
   const { user, setUser } = useUserStore()
@@ -46,10 +46,31 @@ const Navbar: React.FC = () => {
                   </div>
                 </div>
               </DropdownItem>
-              <DropdownItem key="copy">
-                <div className="flex justify-between w-full">
+              <DropdownItem className="cursor-default" key="copy" isReadOnly>
+                <div className="flex justify-between w-full items-center">
                   <span>token usage</span>
-                  <span className="text-success">{user?.token_usage}</span>
+                  <Popover size="lg" placement="right">
+                    <PopoverTrigger>
+                      <span className="text-sm cursor-pointer"><IcBaselineInfo width={15} height={15} /></span>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="px-1 py-2 w-[150px]">
+                        <div className="text-small font-bold text-center pb-2">Usage Tracker</div>
+                        <div className="text-tiny flex justify-between">
+                          <span>Prompt Token</span>
+                          <span className="text-success">{user?.token_usage?.prompt_token}</span>
+                        </div>
+                        <div className="text-tiny flex justify-between">
+                          <span>Completion Token</span>
+                          <span className="text-success">{user?.token_usage?.completion_token}</span>
+                        </div>
+                        <div className="text-tiny flex justify-between">
+                          <span>Cost</span>
+                          <span className="text-danger">${user?.token_usage?.cost}</span>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </DropdownItem>
               <DropdownItem key="edit">

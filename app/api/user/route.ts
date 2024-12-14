@@ -1,8 +1,7 @@
 import { APIResponse } from "@/app/utils/api-response"
 import { UserModel, User } from "@/database/models/user"
 import { connection } from "@/database/connect"
-import { NextRequest, NextResponse } from "next/server"
-import { redirect } from "next/navigation"
+import { NextRequest } from "next/server"
 
 export async function POST(req: NextRequest) {
     try {
@@ -16,14 +15,23 @@ export async function POST(req: NextRequest) {
 
         const findEmail = await UserModel.findOne({ email })
         if (findEmail) {
-            if (findEmail.status == "pending") return APIResponse<null>(`This ${email} account is already in queue.`, null)
+            if (findEmail.status == "pending") {
+                return APIResponse<null>(`This ${email} account is already in queue.`, null)
+            }
             if (findEmail.status == "accepted") {
                 return APIResponse<typeof findEmail>(`success`, findEmail)
+            } else {
+                return APIResponse<null>(`This ${email} account is invalid status.`, null)
             }
-            else return APIResponse<null>(`This ${email} account is invalid status.`, null)
         }
 
-        const result = await new UserModel({...body, token_usage: 0, role: "user", status: "pending" }).save()
+        const result = await new UserModel({
+            ...body,
+            token_usage: { prompt_token: 0, completion_token: 0, cost: 0 },
+            role: "user",
+            status: "pending",
+        }).save()
+
         return APIResponse<typeof result>(`Added ${email} to pending stage.`, result)
     } catch (error) {
         return APIResponse<typeof error>("Error!", error)

@@ -1,43 +1,64 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document } from "mongoose"
 
-export interface User {
+export interface TokenUsage {
+    prompt_token: number
+    completion_token: number
+    cost: number
+}
+
+export interface User extends Document {
     email: string
     name: string
     image: string
-    token_usage: number
+    token_usage?: TokenUsage
     status: "pending" | "accepted"
     role: "user" | "owner"
 }
 
-const { Schema, model } = mongoose
+const { Schema, model, models } = mongoose
 
-export const UserSchema = new Schema<User & Document>({
+const TokenUsageSchema = new Schema<TokenUsage>({
+    prompt_token: {
+        type: Schema.Types.Number,
+        default: 0,
+    },
+    completion_token: {
+        type: Schema.Types.Number,
+        default: 0,
+    },
+    cost: {
+        type: Schema.Types.Number,
+        default: 0,
+    },
+}, { _id: false })
+
+const UserSchema = new Schema<User>({
     email: {
         type: Schema.Types.String,
-        required: true
+        required: true,
     },
     name: {
         type: Schema.Types.String,
-        required: true
+        required: true,
     },
     image: {
         type: Schema.Types.String,
-        required: true
+        required: true,
     },
     token_usage: {
-        type: Schema.Types.Number,
-        required: true
+        type: TokenUsageSchema,
+        required: false,
     },
     status: {
         type: Schema.Types.String,
         enum: ["pending", "accepted"],
-        required: true
+        required: true,
     },
     role: {
         type: Schema.Types.String,
         enum: ["user", "owner"],
-        required: true
-    }
-}, { timestamps: true, _id: true })
+        required: true,
+    },
+}, { timestamps: true })
 
-export const UserModel = mongoose.models.User || mongoose.model('User', UserSchema);
+export const UserModel = models.User || model<User>('User', UserSchema);

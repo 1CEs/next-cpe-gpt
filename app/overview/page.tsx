@@ -19,21 +19,26 @@ const OverviewPage = (props: Props) => {
     ]
 
     const { chats } = useChatStore()
+
     return (
-        <div className='flex justify-center w-full'>
-            {chats.length == 0 &&
-                <div className='flex gap-y-3 flex-col w-full h-full translate-y-72 justify-center items-center text-white text-4xl'>
-                    <span>What can i help with?</span>
-                    <div className="flex flex-wrap items-center mt-4 space-x-2 text-lg">
+        <div className="flex flex-col items-center w-full md:p-4 sm:p-2">
+            {chats.length === 0 ? (
+                <div className="flex flex-col justify-center items-center w-full h-full translate-y-32 text-center text-white text-3xl sm:text-2xl md:text-4xl">
+                    <span>What can I help with?</span>
+                    <div className="flex flex-wrap justify-center mt-4 space-x-2 text-base sm:text-sm md:text-lg">
                         {suggestionMessage.map((message: string, idx: number) => (
-                            <div key={idx} className="text-gray-300 p-2 rounded-xl text-sm bg-slate-700 hover:text-white cursor-pointer">
+                            <div
+                                key={idx}
+                                className="text-gray-300 p-2 rounded-xl text-sm bg-slate-700 hover:text-white cursor-pointer transition duration-300 ease-in-out transform hover:scale-105"
+                            >
                                 {message}
                             </div>
                         ))}
                     </div>
                 </div>
-            }
-            { chats.length > 0 && <ChatDisplayer />}
+            ) : (
+                <ChatDisplayer />
+            )}
             <MessageBox />
         </div>
     )

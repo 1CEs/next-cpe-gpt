@@ -5,7 +5,7 @@ import { persist, PersistOptions } from "zustand/middleware"
 
 interface IUserStore {
     user: (User & Document) | null
-    setUser: (user: IUserStore["user"]) => void
+    setUser: (user: IUserStore["user"] | null) => void
 }
 
 type IUserStorePersist = IUserStore

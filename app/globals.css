@@ -5,3 +5,25 @@
 body {
   @apply bg-gray-950
 }
+
+::-webkit-scrollbar {
+  width: 8px; 
+}
+
+::-webkit-scrollbar-track {
+ 
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-700;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-900;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}

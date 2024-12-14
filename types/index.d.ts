@@ -1,7 +1,7 @@
-import { ChatCompletionCreateParamsNonStreaming } from "openai/resources/chat/completions.mjs"
+import { ChatCompletionCreateParamsNonStreaming, ChatCompletionMessageParam } from "openai/resources/chat/completions.mjs"
 
 type ChatRequest = {
     model: ChatCompletionCreateParamsNonStreaming["model"]
-    messages: ChatCompletionCreateParamsNonStreaming["messages"]
+    messages: ChatCompletionMessageParam
     email: string
 }
